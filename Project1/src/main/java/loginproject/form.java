@@ -4,8 +4,13 @@
  * and open the template in the editor.
  */
 package loginproject;
-
+import java.sql.*;
+import com.mysql.jdbc.Driver;
+import com.toedter.calendar.JDateChooser;
+import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import javax.swing.JOptionPane;
 
 /**
@@ -40,13 +45,13 @@ public class form extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtTempat = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        dateLahir = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
         comboAgama = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         txtTelepon = new javax.swing.JTextField();
         buttonSimpan = new javax.swing.JButton();
         buttonReset = new javax.swing.JButton();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuAbout = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -88,8 +93,20 @@ public class form extends javax.swing.JFrame {
         });
 
         buttonSimpan.setText("Simpan");
+        buttonSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSimpanActionPerformed(evt);
+            }
+        });
 
         buttonReset.setText("Reset");
+        buttonReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonResetActionPerformed(evt);
+            }
+        });
+
+        jDateChooser1.setDateFormatString("yyyy MM dd");
 
         menuAbout.setText("File");
 
@@ -122,41 +139,49 @@ public class form extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(66, 66, 66)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTempat)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(radioLk)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(30, 30, 30)
                                 .addComponent(radioPr)
-                                .addGap(15, 15, 15))))
-                    .addComponent(jLabel6)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel5))
-                        .addGap(19, 19, 19)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dateLahir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(comboAgama, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtTelepon)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(buttonSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(buttonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(17, 17, 17)))))
-                .addContainerGap(26, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txtTempat)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(100, 100, 100)
+                                    .addComponent(jLabel1))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(54, 54, 54)
+                                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabel6)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel7)
+                                .addComponent(jLabel5))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(19, 19, 19)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(comboAgama, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtTelepon)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(buttonSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(buttonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(17, 17, 17))))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                .addGap(31, 31, 31))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,11 +201,11 @@ public class form extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtTempat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
-                    .addComponent(dateLahir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(7, 7, 7)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comboAgama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
@@ -192,13 +217,54 @@ public class form extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonSimpan)
                     .addComponent(buttonReset))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(99, Short.MAX_VALUE))
         );
 
         setSize(new java.awt.Dimension(410, 425));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+   public void simpan() {
+     String nama=txtNama.getText();
+       String jenkel = null;
+       String tempat= txtTempat.getText();
+       
+       //set tanggal jdatechoose
+       String tampilan = "yyyy-MM-dd";
+       SimpleDateFormat fm = new SimpleDateFormat(tampilan);
+       String tanggal = String.valueOf(fm.format(jDateChooser1.getDate()));
+       
+       String agama = (String) comboAgama.getSelectedItem();
+       String nomor = txtTelepon.getText();
+       
+        if (radioLk.isSelected()) {
+            jenkel = "Laki-laki";
+        }
+        else if (radioPr.isSelected()) {
+            jenkel = "Perempuan";
+        }
+        
+        String sql = "INSERT INTO daftar_siswa (nama,jenis_kelamin,tempat_lahir,tanggal_lahir,agama,nomor) VALUES ('"+nama+"','"+jenkel+"','"+tempat+"','"+tanggal+"','"+agama+"','"+nomor+"');";
+        
+        try{
+            
+            Statement statement = Koneksi.getConnection().createStatement();
+            statement.executeUpdate(sql);
+            statement.close();
+            JOptionPane.showMessageDialog(null,"Berhasil Memasukan Data");
+        }catch(HeadlessException | SQLException e){
+            JOptionPane.showMessageDialog(null,"Gagal Memasukan data"+e);
+        }
+}
+   public void reset(){
+       txtNama.setText("");
+       buttonGroup1.clearSelection();
+       txtTempat.setText("");
+       comboAgama.setSelectedIndex(0);
+       txtTelepon.setText("");
+       
+   }
+    
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed
@@ -220,6 +286,14 @@ public class form extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void buttonSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSimpanActionPerformed
+        simpan();
+    }//GEN-LAST:event_buttonSimpanActionPerformed
+
+    private void buttonResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonResetActionPerformed
+        reset();
+    }//GEN-LAST:event_buttonResetActionPerformed
 
     /**
      * @param args the command line arguments
@@ -261,7 +335,7 @@ public class form extends javax.swing.JFrame {
     private javax.swing.JButton buttonReset;
     private javax.swing.JButton buttonSimpan;
     private javax.swing.JComboBox<String> comboAgama;
-    private com.toedter.calendar.JDateChooser dateLahir;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
